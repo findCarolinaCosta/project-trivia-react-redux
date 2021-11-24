@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPlayer } from '../actions';
 
@@ -12,6 +13,7 @@ class Login extends React.Component {
       isButtonDisabled: true,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.onClick = this.onClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -23,12 +25,15 @@ class Login extends React.Component {
     history.push('/game');
   }
 
+  onClick() {
+    const { history } = this.props;
+    history.push('./settings');
+  }
+
   handleInputChange({ target }) {
     const { name, email } = this.state;
     this.setState({
       [target.name]: target.value,
-    });
-    this.setState({
       isButtonDisabled: !(name && email),
     });
   }
@@ -58,14 +63,19 @@ class Login extends React.Component {
         >
           Jogar
         </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ this.onClick }
+        >
+          Configurações
+        </button>
       </form>);
   }
 }
 
 Login.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   token: PropTypes.string.isRequired,
 };
 
