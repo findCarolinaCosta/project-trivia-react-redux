@@ -11,7 +11,7 @@ export default function App() {
       <Route
         exact
         path="/"
-        render={ (props) => <Login { ...props } /> }
+        component={ Login }
       />
       <Route
         path="/game"
