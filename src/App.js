@@ -6,9 +6,7 @@ import Login from './Pages/Login';
 export default function App() {
   return (
     <Switch>
-      <Route path="/">
-        <Login />
-      </Route>
+      <Route path="/" render={ (props) => <Login { ...props } /> } />
     </Switch>
   );
 }
