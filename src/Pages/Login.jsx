@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getPlayer } from '../actions';
+import { getPlayer, getUser } from '../actions';
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       name: '',
       email: '',
-      isButtonDisabled: true,
+      // isButtonDisabled: true,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -18,8 +18,10 @@ class Login extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { token, history } = this.props;
+    const { token, history, dispatch } = this.props;
+    const { name, email } = this.state;
     getPlayer();
+    dispatch(getUser({ name, email }));
     localStorage.setItem('token', token);
     history.push('/game');
   }
@@ -30,15 +32,18 @@ class Login extends React.Component {
   }
 
   handleInputChange({ target }) {
-    const { name, email } = this.state;
+    // const { name, email } = this.state;
     this.setState({
       [target.name]: target.value,
-      isButtonDisabled: !(name && email),
     });
+    // this.setState({
+    //   isButtonDisabled: !(name && email),
+    // });
   }
 
   render() {
-    const { name, email, isButtonDisabled } = this.state;
+    const { name, email } = this.state;
+    const isDisabled = name && email;
     return (
       <form onSubmit={ this.onSubmit }>
         <input
@@ -58,7 +63,7 @@ class Login extends React.Component {
         <button
           data-testid="btn-play"
           type="submit"
-          disabled={ isButtonDisabled }
+          disabled={ !isDisabled }
         >
           Jogar
         </button>
@@ -76,6 +81,7 @@ class Login extends React.Component {
 Login.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   token: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
