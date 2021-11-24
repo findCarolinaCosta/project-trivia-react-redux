@@ -1,4 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import { getPlayer } from '../actions';
 
 class Login extends React.Component {
   constructor(props) {
@@ -9,10 +12,15 @@ class Login extends React.Component {
       isButtonDisabled: true,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit() {
-
+  onSubmit(event) {
+    event.preventDefault();
+    const { token, history } = this.props;
+    getPlayer();
+    localStorage.setItem('token', token);
+    history.push('/game');
   }
 
   handleInputChange({ target }) {
@@ -49,10 +57,20 @@ class Login extends React.Component {
           disabled={ isButtonDisabled }
         >
           Jogar
-
         </button>
       </form>);
   }
 }
 
-export default Login;
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  token: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  token: state.token.state,
+});
+
+export default connect(mapStateToProps)(Login);
