@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Login extends React.Component {
   constructor(props) {
@@ -9,10 +10,16 @@ class Login extends React.Component {
       isButtonDisabled: true,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   onSubmit() {
 
+  }
+
+  onClick() {
+    const { history } = this.props;
+    history.push('./settings');
   }
 
   handleInputChange({ target }) {
@@ -49,10 +56,20 @@ class Login extends React.Component {
           disabled={ isButtonDisabled }
         >
           Jogar
-
+        </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ this.onClick }
+        >
+          Configurações
         </button>
       </form>);
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+};
 
 export default Login;
