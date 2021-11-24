@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getPlayer } from '../actions';
+import { getPlayer, getUser } from '../actions';
 
 class Login extends React.Component {
   constructor(props) {
@@ -18,8 +18,10 @@ class Login extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { token, history } = this.props;
+    const { token, history, dispatch } = this.props;
+    const { name, email } = this.state;
     getPlayer();
+    dispatch(getUser({ name, email }));
     localStorage.setItem('token', token);
     history.push('/game');
   }
@@ -76,6 +78,7 @@ class Login extends React.Component {
 Login.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   token: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

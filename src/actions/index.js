@@ -15,3 +15,7 @@ export const getPlayer = () => async (dispatch) => {
     console.log(e);
   }
 };
+
+export const GET_USER = 'GET-USER';
+
+export const getUser = (data) => ({ type: GET_USER, data });
