@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { getPlayer, getUser } from '../actions';
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       name: '',
       email: '',
-      isButtonDisabled: true,
+      // isButtonDisabled: true,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -32,15 +32,18 @@ class Login extends React.Component {
   }
 
   handleInputChange({ target }) {
-    const { name, email } = this.state;
+    // const { name, email } = this.state;
     this.setState({
       [target.name]: target.value,
-      isButtonDisabled: !(name && email),
     });
+    // this.setState({
+    //   isButtonDisabled: !(name && email),
+    // });
   }
 
   render() {
-    const { name, email, isButtonDisabled } = this.state;
+    const { name, email } = this.state;
+    const isDisabled = name && email;
     return (
       <form onSubmit={ this.onSubmit }>
         <input
@@ -60,7 +63,7 @@ class Login extends React.Component {
         <button
           data-testid="btn-play"
           type="submit"
-          disabled={ isButtonDisabled }
+          disabled={ !isDisabled }
         >
           Jogar
         </button>
