@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getPlayer, getUser } from '../actions';
+import { getPlayer, getUser, getUserRanking } from '../actions';
+import convertEmailToHash from '../services/gravatarRequest';
 
 class Login extends React.Component {
   constructor() {
@@ -9,7 +10,6 @@ class Login extends React.Component {
     this.state = {
       name: '',
       email: '',
-      // isButtonDisabled: true,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -20,8 +20,16 @@ class Login extends React.Component {
     event.preventDefault();
     const { token, history, dispatch } = this.props;
     const { name, email } = this.state;
+    const newObj = {
+      name,
+      score: '',
+      picture: convertEmailToHash(email),
+    };
+
+    dispatch(getUserRanking(newObj));
     dispatch(getPlayer());
     dispatch(getUser({ name, email }));
+
     localStorage.setItem('token', token);
     history.push('/game');
   }
@@ -32,13 +40,9 @@ class Login extends React.Component {
   }
 
   handleInputChange({ target }) {
-    // const { name, email } = this.state;
     this.setState({
       [target.name]: target.value,
     });
-    // this.setState({
-    //   isButtonDisabled: !(name && email),
-    // });
   }
 
   render() {

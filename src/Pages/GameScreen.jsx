@@ -1,26 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import convertEmailToHash from '../services/gravatarRequest';
 import Question from '../Components/Question';
 
 class GameScreen extends React.Component {
-  render() {
-    const { name, email } = this.props;
-    const link = convertEmailToHash(email);
+  constructor() {
+    super();
+    this.catchPicture = this.catchPicture.bind(this);
+  }
 
+  catchPicture() {
+    const { ranking, name } = this.props;
+    const link = ranking.find((data) => data.name === name);
+    return link.picture;
+  }
+
+  render() {
+    const { name } = this.props;
     return (
-      <>
+      <div>
         <header>
           <img
             data-testid="header-profile-picture"
             alt="Foto do perfil"
-            src={ link }
+            src={ this.catchPicture() }
           />
           <p
             data-testid="header-player-name"
           >
-            {name}
+            { name }
           </p>
           <p
             data-testid="header-score"
@@ -29,19 +37,19 @@ class GameScreen extends React.Component {
           </p>
         </header>
         <Question />
-      </>
+      </div>
     );
   }
 }
 
 GameScreen.propTypes = {
   name: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
+  ranking: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   name: state.player.name,
-  email: state.player.email,
+  ranking: state.ranking,
 });
 
 export default connect(mapStateToProps)(GameScreen);

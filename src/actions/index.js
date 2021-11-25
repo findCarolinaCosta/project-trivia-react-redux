@@ -2,6 +2,8 @@ import tokenRequest from '../services/tokenRequest';
 import questionsRequest from '../services/questionRequest';
 
 export const GET_PLAYER_TOKEN = 'GET_PLAYER_TOKEN';
+export const GET_USER = 'GET-USER';
+export const GET_USER_RANKING = 'GET_USER_RANKING';
 export const SET_QUESTIONS = 'SET_QUESTIONS';
 
 export const getPlayerToken = (token) => ({
@@ -23,6 +25,11 @@ export const getPlayer = () => async (dispatch) => {
   }
 };
 
+export const getUser = (data) => ({
+  type: GET_USER,
+  data,
+});
+
 export const getQuestionsAction = (token) => async (dispatch) => {
   try {
     const response = await questionsRequest(token);
@@ -32,6 +39,7 @@ export const getQuestionsAction = (token) => async (dispatch) => {
   }
 };
 
-export const GET_USER = 'GET-USER';
-
-export const getUser = (data) => ({ type: GET_USER, data });
+export const getUserRanking = (payload) => ({
+  type: GET_USER_RANKING,
+  payload,
+});
