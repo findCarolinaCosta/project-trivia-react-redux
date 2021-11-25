@@ -85,7 +85,7 @@ Login.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  token: state.token.state,
+  token: state.token,
 });
 
 export default connect(mapStateToProps)(Login);
