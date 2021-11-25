@@ -57,7 +57,7 @@ class Question extends Component {
     const { token } = this.props;
     return (
       <div className="teste">
-        { !token ? '' : this.getQuestions() }
+        { !token ? '' : this.getQuestions()[0] }
       </div>
     );
   }
