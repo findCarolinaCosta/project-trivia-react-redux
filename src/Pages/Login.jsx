@@ -20,7 +20,7 @@ class Login extends React.Component {
     event.preventDefault();
     const { token, history, dispatch } = this.props;
     const { name, email } = this.state;
-    getPlayer();
+    dispatch(getPlayer());
     dispatch(getUser({ name, email }));
     localStorage.setItem('token', token);
     history.push('/game');
@@ -85,7 +85,7 @@ Login.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  token: state.token.state,
+  token: state.token,
 });
 
 export default connect(mapStateToProps)(Login);

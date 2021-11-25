@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import convertEmailToHash from '../services/gravatarRequest';
+import Question from '../Components/Question';
 
 class GameScreen extends React.Component {
   render() {
@@ -9,23 +10,26 @@ class GameScreen extends React.Component {
     const link = convertEmailToHash(email);
 
     return (
-      <header>
-        <img
-          data-testid="header-profile-picture"
-          alt="Foto do perfil"
-          src={ link }
-        />
-        <p
-          data-testid="header-player-name"
-        >
-          { name }
-        </p>
-        <p
-          data-testid="header-score"
-        >
-          0
-        </p>
-      </header>
+      <>
+        <header>
+          <img
+            data-testid="header-profile-picture"
+            alt="Foto do perfil"
+            src={ link }
+          />
+          <p
+            data-testid="header-player-name"
+          >
+            {name}
+          </p>
+          <p
+            data-testid="header-score"
+          >
+            0
+          </p>
+        </header>
+        <Question />
+      </>
     );
   }
 }
