@@ -27,7 +27,7 @@ class Login extends React.Component {
     };
 
     dispatch(getUserRanking(newObj));
-    getPlayer();
+    dispatch(getPlayer());
     dispatch(getUser({ name, email }));
 
     localStorage.setItem('token', token);
@@ -89,7 +89,7 @@ Login.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  token: state.token.state,
+  token: state.token,
 });
 
 export default connect(mapStateToProps)(Login);

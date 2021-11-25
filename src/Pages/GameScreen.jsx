@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Question from '../Components/Question';
 
 class GameScreen extends React.Component {
   constructor() {
@@ -17,23 +18,26 @@ class GameScreen extends React.Component {
   render() {
     const { name } = this.props;
     return (
-      <header>
-        <img
-          data-testid="header-profile-picture"
-          alt="Foto do perfil"
-          src={ this.catchPicture() }
-        />
-        <p
-          data-testid="header-player-name"
-        >
-          { name }
-        </p>
-        <p
-          data-testid="header-score"
-        >
-          0
-        </p>
-      </header>
+      <div>
+        <header>
+          <img
+            data-testid="header-profile-picture"
+            alt="Foto do perfil"
+            src={ this.catchPicture() }
+          />
+          <p
+            data-testid="header-player-name"
+          >
+            { name }
+          </p>
+          <p
+            data-testid="header-score"
+          >
+            0
+          </p>
+        </header>
+        <Question />
+      </div>
     );
   }
 }
