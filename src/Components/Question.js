@@ -43,7 +43,7 @@ class Question extends Component {
                   key="correct-answer"
                   type="button"
                   data-testid="correct-answer"
-                  id="correct-answer"
+                  className="correct-answer"
                   onClick={ this.onClick }
                   disabled={ isSelected }
                 >
