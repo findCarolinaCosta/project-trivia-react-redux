@@ -18,7 +18,7 @@ class Login extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { token, history, dispatch } = this.props;
+    const { history, dispatch } = this.props;
     const { name, email } = this.state;
     const newObj = {
       name,
@@ -29,8 +29,16 @@ class Login extends React.Component {
     dispatch(getUserRanking(newObj));
     dispatch(getPlayer());
     dispatch(getUser({ name, email }));
-
-    localStorage.setItem('token', token);
+    const playerObj = {
+      player: {
+        name,
+        assertions: [],
+        score: 0,
+        gravatarEmail: email,
+      },
+    };
+    localStorage.setItem('state', JSON.stringify(playerObj));
+    // localStorage.setItem('token', token);
     history.push('/game');
   }
 
@@ -84,7 +92,7 @@ class Login extends React.Component {
 
 Login.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
-  token: PropTypes.string.isRequired,
+  // token: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

@@ -19,7 +19,7 @@ class GameScreen extends React.Component {
   }
 
   render() {
-    const { name, history } = this.props;
+    const { name, history, score } = this.props;
     return (
       <div>
         <header>
@@ -36,7 +36,7 @@ class GameScreen extends React.Component {
           <p
             data-testid="header-score"
           >
-            0
+            { score }
           </p>
         </header>
         <Question history={ history } />
@@ -49,11 +49,13 @@ GameScreen.propTypes = {
   name: PropTypes.string.isRequired,
   ranking: PropTypes.arrayOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   name: state.player.name,
   ranking: state.ranking,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(GameScreen);
