@@ -12,11 +12,14 @@ class GameScreen extends React.Component {
   catchPicture() {
     const { ranking, name } = this.props;
     const link = ranking.find((data) => data.name === name);
-    return link.picture;
+    if (link) {
+      return link.picture;
+    }
+    return '';
   }
 
   render() {
-    const { name } = this.props;
+    const { name, history } = this.props;
     return (
       <div>
         <header>
@@ -36,7 +39,7 @@ class GameScreen extends React.Component {
             0
           </p>
         </header>
-        <Question />
+        <Question history={ history } />
       </div>
     );
   }
@@ -45,6 +48,7 @@ class GameScreen extends React.Component {
 GameScreen.propTypes = {
   name: PropTypes.string.isRequired,
   ranking: PropTypes.arrayOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 const mapStateToProps = (state) => ({

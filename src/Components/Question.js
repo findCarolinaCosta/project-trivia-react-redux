@@ -2,15 +2,18 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getQuestionsAction } from '../actions';
+import './question.css';
 
 class Question extends Component {
   constructor() {
     super();
     this.state = {
       isSelected: false,
+      actualQuestion: 0,
     };
     this.getQuestions = this.getQuestions.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.nextQuestion = this.nextQuestion.bind(this);
   }
 
   componentDidMount() {
@@ -19,38 +22,32 @@ class Question extends Component {
   }
 
   onClick() {
-    // const { id } = target;
     this.setState({ isSelected: true });
-    /* if (id === 'correct-answer') {
-      console.log('resposta correta');
-    } else {
-      console.log('resposta errada');
-    } */
   }
 
   getQuestions() {
     const { isSelected } = this.state;
     const { questions } = this.props;
     return (questions.map((question) => {
-      const incorrectAnswer = question.incorrect_answers.map((item) => item);
-      const questionsArr = [...incorrectAnswer, question.correct_answer];
+      const incorrectAnswers = question.incorrect_answers;
+      const questionsArr = [...incorrectAnswers, question.correct_answer];
+      const shuffled = questionsArr.sort();
       return (
         <div key={ question.correct_answer }>
           <h2 data-testid="question-category">{ question.category }</h2>
           <p data-testid="question-text">{ question.question }</p>
-          {questionsArr.map((item, index) => {
+          {shuffled.map((item, index) => {
             if (item === question.correct_answer) {
               return (
                 <button
-                  key={ `wrong-answer-${index}` }
+                  key="correct-answer"
                   type="button"
-                  name="question"
                   data-testid="correct-answer"
                   id="correct-answer"
                   onClick={ this.onClick }
-                  style={ isSelected ? { border: '3px solid rgb(6, 240, 15)' } : null }
+                  disabled={ isSelected }
                 >
-                  {item}
+                  { item }
                 </button>
               );
             }
@@ -58,24 +55,53 @@ class Question extends Component {
               <button
                 key={ `wrong-answer-${index}` }
                 type="button"
-                name="question"
                 data-testid={ `wrong-answer-${index}` }
-                id="wrong-answer-0"
+                className="wrong-answer"
                 onClick={ this.onClick }
-                style={ isSelected ? { border: '3px solid rgb(255, 0, 0)' } : null }
+                disabled={ isSelected }
               >
-                {item}
+                { item }
               </button>);
           })}
         </div>);
     }));
   }
 
+  nextQuestion() {
+    const MAX_QUEST = 5;
+    const { actualQuestion } = this.state;
+    if (actualQuestion < MAX_QUEST) {
+      this.setState((prevState) => ({
+        actualQuestion: prevState.actualQuestion + 1,
+        isSelected: false,
+      }));
+    }
+  }
+
   render() {
     const { token } = this.props;
+    const { actualQuestion, isSelected } = this.state;
+    const MAX_QUEST = 5;
     return (
       <div className="teste">
-        { !token ? '' : this.getQuestions()[0] }
+        { !token ? '' : this.getQuestions()[actualQuestion] }
+        { actualQuestion >= MAX_QUEST
+          && (
+            <button
+              type="button"
+            >
+              Ver resultados
+            </button>)}
+        { isSelected
+        && (
+          <button
+            data-testid="btn-next"
+            type="button"
+            onClick={ this.nextQuestion }
+            disabled={ !isSelected }
+          >
+            Próxima
+          </button>)}
       </div>
     );
   }
@@ -90,6 +116,7 @@ Question.propTypes = {
   token: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf(PropTypes.any).isRequired,
+  // history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps)(Question);
