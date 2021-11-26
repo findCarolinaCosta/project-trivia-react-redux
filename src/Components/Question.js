@@ -18,8 +18,6 @@ class Question extends Component {
     this.onClick = this.onClick.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
     this.setGameTime = this.setGameTime.bind(this);
-    /*     this.updateGameTimer = this.updateGameTimer(this);
- */
   }
 
   componentDidMount() {
@@ -41,7 +39,6 @@ class Question extends Component {
 
   componentWillUnmount() {
     this.setGameTime();
-    console.log('vou desmontar');
   }
 
   onClick() {
