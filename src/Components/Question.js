@@ -6,7 +6,11 @@ import { getQuestionsAction } from '../actions';
 class Question extends Component {
   constructor() {
     super();
+    this.state = {
+      isSelected: false,
+    };
     this.getQuestions = this.getQuestions.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   componentDidMount() {
@@ -14,7 +18,18 @@ class Question extends Component {
     dispatch(getQuestionsAction(token));
   }
 
+  onClick() {
+    // const { id } = target;
+    this.setState({ isSelected: true });
+    /* if (id === 'correct-answer') {
+      console.log('resposta correta');
+    } else {
+      console.log('resposta errada');
+    } */
+  }
+
   getQuestions() {
+    const { isSelected } = this.state;
     const { questions } = this.props;
     return (questions.map((question) => {
       const incorrectAnswer = question.incorrect_answers.map((item) => item);
@@ -26,28 +41,31 @@ class Question extends Component {
           {questionsArr.map((item, index) => {
             if (item === question.correct_answer) {
               return (
-                <label key={ item } htmlFor="correct-answer">
-                  <input
-                    type="radio"
-                    name="question"
-                    data-testid="correct-answer"
-                    id="correct-answer"
-                  />
+                <button
+                  key={ `wrong-answer-${index}` }
+                  type="button"
+                  name="question"
+                  data-testid="correct-answer"
+                  id="correct-answer"
+                  onClick={ this.onClick }
+                  style={ isSelected ? { border: '3px solid rgb(6, 240, 15)' } : null }
+                >
                   {item}
-                </label>
+                </button>
               );
             }
             return (
-              <label key={ item } htmlFor="wrong-answer-0">
-                <input
-                  type="radio"
-                  name="question"
-                  data-testid={ `wrong-answer-${index}` }
-                  id="wrong-answer-0"
-                />
+              <button
+                key={ `wrong-answer-${index}` }
+                type="button"
+                name="question"
+                data-testid={ `wrong-answer-${index}` }
+                id="wrong-answer-0"
+                onClick={ this.onClick }
+                style={ isSelected ? { border: '3px solid rgb(255, 0, 0)' } : null }
+              >
                 {item}
-              </label>
-            );
+              </button>);
           })}
         </div>);
     }));
