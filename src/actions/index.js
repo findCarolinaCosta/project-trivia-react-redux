@@ -17,7 +17,7 @@ export const setQuestions = (questions) => ({
   questions,
 });
 
-export const setUpdateScore2 = (player, score) => {
+export const setUpdateScore = (player, score) => {
   const playerNew = { ...player };
   playerNew.score = score + player.score;
   localStorage.setItem('state', JSON.stringify({ player: playerNew }));

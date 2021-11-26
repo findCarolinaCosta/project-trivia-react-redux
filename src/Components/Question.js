@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getQuestionsAction, setUpdateScore2 } from '../actions';
+import { getQuestionsAction, setUpdateScore } from '../actions';
 import './question.css';
 
 const GAME_TIME = 30;
@@ -127,7 +127,7 @@ class Question extends Component {
     }
 
     const pontuação = BASE_SCORE + (gameTime * difficultyScore);
-    dispatch(setUpdateScore2(player, pontuação));
+    dispatch(setUpdateScore(player, pontuação));
   }
 
   nextQuestion() {
