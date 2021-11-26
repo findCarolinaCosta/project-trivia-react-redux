@@ -4,25 +4,54 @@ import { connect } from 'react-redux';
 import { getQuestionsAction } from '../actions';
 import './question.css';
 
+const GAME_TIME = 30;
+const ONE_SECOND_IN_MS = 1000;
 class Question extends Component {
   constructor() {
     super();
     this.state = {
+      gameTime: GAME_TIME,
       isSelected: false,
       actualQuestion: 0,
     };
     this.getQuestions = this.getQuestions.bind(this);
     this.onClick = this.onClick.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
+    this.setGameTime = this.setGameTime.bind(this);
+    /*     this.updateGameTimer = this.updateGameTimer(this);
+ */
   }
 
   componentDidMount() {
     const { token, dispatch } = this.props;
     dispatch(getQuestionsAction(token));
+    this.intervalTime = setInterval(() => {
+      this.setState((prevState) => ({
+        gameTime: prevState.gameTime - 1,
+        isSelected: prevState.gameTime === 1,
+      }));
+    }, ONE_SECOND_IN_MS);
+  }
+
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.gameTime === 1) {
+      clearInterval(this.intervalTime);
+    }
+  }
+
+  componentWillUnmount() {
+    this.setGameTime();
+    console.log('vou desmontar');
   }
 
   onClick() {
     this.setState({ isSelected: true });
+  }
+
+  setGameTime() {
+    this.setState({
+      gameTime: GAME_TIME,
+    });
   }
 
   getQuestions() {
@@ -80,7 +109,7 @@ class Question extends Component {
 
   render() {
     const { token } = this.props;
-    const { actualQuestion, isSelected } = this.state;
+    const { actualQuestion, isSelected, gameTime } = this.state;
     const MAX_QUEST = 5;
     return (
       <div className="teste">
@@ -102,6 +131,7 @@ class Question extends Component {
           >
             Próxima
           </button>)}
+        <p>{gameTime}</p>
       </div>
     );
   }
