@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getQuestionsAction } from '../actions';
+import { getQuestionsAction, setUpdateScore } from '../actions';
 import './question.css';
 
 const GAME_TIME = 30;
@@ -19,6 +19,7 @@ class Question extends Component {
     this.nextQuestion = this.nextQuestion.bind(this);
     this.setGameTime = this.setGameTime.bind(this);
     this.setTimerGlobal = this.setTimerGlobal.bind(this);
+    this.correctAnswer = this.correctAnswer.bind(this);
   }
 
   componentDidMount() {
@@ -28,9 +29,11 @@ class Question extends Component {
   }
 
   componentDidUpdate(_prevProps, prevState) {
+    const { player } = this.props;
     if (prevState.gameTime === 1) {
       clearInterval(this.intervalTime);
     }
+    localStorage.setItem('state', JSON.stringify({ player }));
   }
 
   componentWillUnmount() {
@@ -38,7 +41,11 @@ class Question extends Component {
     this.setGameTime();
   }
 
-  onClick() {
+  onClick({ target }) {
+    const { className } = target;
+    if (className === 'correct-answer') {
+      this.correctAnswer();
+    }
     this.setState({ isSelected: true });
     const { gameTime } = this.state;
     console.log(gameTime);
@@ -84,6 +91,7 @@ class Question extends Component {
                   data-testid="correct-answer"
                   className="correct-answer"
                   onClick={ this.onClick }
+                  difficulty={ question.difficulty }
                   disabled={ isSelected }
                 >
                   { item }
@@ -97,6 +105,7 @@ class Question extends Component {
                 data-testid={ `wrong-answer-${index}` }
                 className="wrong-answer"
                 onClick={ this.onClick }
+                difficulty={ question.difficulty }
                 disabled={ isSelected }
               >
                 { item }
@@ -104,6 +113,34 @@ class Question extends Component {
           })}
         </div>);
     }));
+  }
+
+  correctAnswer() {
+    // Calcular pontuação baseada em: 10 + (timer * dificuldade)
+    // hard: 3, medium: 2, easy: 1
+    const BASE_SCORE = 10;
+    const DIFFICULTY_NUMBER = 3;
+    let difficultyScore = 1;
+
+    const { gameTime, actualQuestion } = this.state;
+    const { questions, dispatch, player } = this.props;
+
+    const { difficulty } = questions[actualQuestion];
+
+    switch (difficulty) {
+    case 'hard':
+      difficultyScore = DIFFICULTY_NUMBER;
+      break;
+    case 'medium':
+      difficultyScore = DIFFICULTY_NUMBER - 1;
+      break;
+    default:
+      difficultyScore = DIFFICULTY_NUMBER - 2;
+      break;
+    }
+
+    const pontuação = BASE_SCORE + (gameTime * difficultyScore);
+    dispatch(setUpdateScore(player, pontuação));
   }
 
   nextQuestion() {
@@ -147,6 +184,7 @@ class Question extends Component {
 const mapStateToProps = (state) => ({
   token: state.token,
   questions: state.questions,
+  player: state.player,
 });
 
 Question.propTypes = {
@@ -154,6 +192,7 @@ Question.propTypes = {
   dispatch: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  player: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps)(Question);
