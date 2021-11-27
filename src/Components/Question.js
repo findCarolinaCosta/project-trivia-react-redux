@@ -48,7 +48,6 @@ class Question extends Component {
     }
     this.setState({ isSelected: true });
     const { gameTime } = this.state;
-    console.log(gameTime);
     clearInterval(this.intervalTime);
     this.setState({
       gameTime,
@@ -57,7 +56,6 @@ class Question extends Component {
 
   setTimerGlobal() {
     this.intervalTime = setInterval(() => {
-      console.log('Estou contando');
       this.setState((prevState) => ({
         gameTime: prevState.gameTime - 1,
         isSelected: prevState.gameTime === 1,
