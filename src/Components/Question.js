@@ -18,18 +18,14 @@ class Question extends Component {
     this.onClick = this.onClick.bind(this);
     this.nextQuestion = this.nextQuestion.bind(this);
     this.setGameTime = this.setGameTime.bind(this);
+    this.setTimerGlobal = this.setTimerGlobal.bind(this);
     this.correctAnswer = this.correctAnswer.bind(this);
   }
 
   componentDidMount() {
     const { token, dispatch } = this.props;
     dispatch(getQuestionsAction(token));
-    this.intervalTime = setInterval(() => {
-      this.setState((prevState) => ({
-        gameTime: prevState.gameTime - 1,
-        isSelected: prevState.gameTime === 1,
-      }));
-    }, ONE_SECOND_IN_MS);
+    this.setTimerGlobal();
   }
 
   componentDidUpdate(_prevProps, prevState) {
@@ -41,6 +37,7 @@ class Question extends Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.intervalTime);
     this.setGameTime();
   }
 
@@ -50,6 +47,20 @@ class Question extends Component {
       this.correctAnswer();
     }
     this.setState({ isSelected: true });
+    const { gameTime } = this.state;
+    clearInterval(this.intervalTime);
+    this.setState({
+      gameTime,
+    });
+  }
+
+  setTimerGlobal() {
+    this.intervalTime = setInterval(() => {
+      this.setState((prevState) => ({
+        gameTime: prevState.gameTime - 1,
+        isSelected: prevState.gameTime === 1,
+      }));
+    }, ONE_SECOND_IN_MS);
   }
 
   setGameTime() {
@@ -131,30 +142,27 @@ class Question extends Component {
   }
 
   nextQuestion() {
-    const MAX_QUEST = 5;
+    const MAX_QUEST = 4;
     const { actualQuestion } = this.state;
+    const { history } = this.props;
     if (actualQuestion < MAX_QUEST) {
       this.setState((prevState) => ({
         actualQuestion: prevState.actualQuestion + 1,
         isSelected: false,
       }));
+    } else {
+      history.push('./feedback');
     }
+    this.setGameTime();
+    this.setTimerGlobal();
   }
 
   render() {
     const { token } = this.props;
     const { actualQuestion, isSelected, gameTime } = this.state;
-    const MAX_QUEST = 5;
     return (
       <div className="teste">
         { !token ? '' : this.getQuestions()[actualQuestion] }
-        { actualQuestion >= MAX_QUEST
-          && (
-            <button
-              type="button"
-            >
-              Ver resultados
-            </button>)}
         { isSelected
         && (
           <button
@@ -181,6 +189,7 @@ Question.propTypes = {
   token: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
   player: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
