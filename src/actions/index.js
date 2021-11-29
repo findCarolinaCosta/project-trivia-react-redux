@@ -17,13 +17,15 @@ export const setQuestions = (questions) => ({
   questions,
 });
 
-export const setUpdateScore = (player, score) => {
+export const setUpdateScore = (player, score, assertions) => {
   const playerNew = { ...player };
   playerNew.score = score + player.score;
+  playerNew.assertions = assertions;
   localStorage.setItem('state', JSON.stringify({ player: playerNew }));
   return ({
     type: SET_UPDATE_SCORE,
     score,
+    assertions,
   });
 };
 export const getPlayer = () => async (dispatch) => {

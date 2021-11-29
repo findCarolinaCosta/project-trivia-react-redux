@@ -122,9 +122,9 @@ class Question extends Component {
 
     const { gameTime, actualQuestion } = this.state;
     const { questions, dispatch, player } = this.props;
-
+    const { assertions } = player;
     const { difficulty } = questions[actualQuestion];
-
+    const newAssertion = assertions + 1;
     switch (difficulty) {
     case 'hard':
       difficultyScore = DIFFICULTY_NUMBER;
@@ -138,7 +138,7 @@ class Question extends Component {
     }
 
     const pontuação = BASE_SCORE + (gameTime * difficultyScore);
-    dispatch(setUpdateScore(player, pontuação));
+    dispatch(setUpdateScore(player, pontuação, newAssertion));
   }
 
   nextQuestion() {
