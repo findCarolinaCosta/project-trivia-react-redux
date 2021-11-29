@@ -2,7 +2,7 @@ import { GET_USER, SET_UPDATE_SCORE } from '../actions';
 
 const INITIAL_PLAYER_STATE = {
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
 };
@@ -19,6 +19,7 @@ const playerReducer = (state = INITIAL_PLAYER_STATE, action) => {
     return {
       ...state,
       score: state.score + action.score,
+      assertions: action.assertions,
     };
   default:
     return state;
