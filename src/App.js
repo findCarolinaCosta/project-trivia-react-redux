@@ -5,6 +5,7 @@ import Login from './Pages/Login';
 import GameScreen from './Pages/GameScreen';
 import Settings from './Pages/Settings';
 import Feedback from './Pages/Feedback';
+import Ranking from './Pages/Ranking';
 
 export default function App() {
   return (
@@ -25,6 +26,10 @@ export default function App() {
       <Route
         path="/feedback"
         component={ Feedback }
+      />
+      <Route
+        path="/ranking"
+        component={ Ranking }
       />
     </Switch>
   );
