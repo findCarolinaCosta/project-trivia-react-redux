@@ -6,6 +6,7 @@ export const GET_USER = 'GET-USER';
 export const GET_USER_RANKING = 'GET_USER_RANKING';
 export const SET_QUESTIONS = 'SET_QUESTIONS';
 export const SET_UPDATE_SCORE = 'SET_UPDATE_SCORE';
+export const RESET_PLAYER_SCORE_AND_ASSERTIONS = 'RESET_PLAYER_SCORE_AND_ASSERTIONS';
 
 export const getPlayerToken = (token) => ({
   type: GET_PLAYER_TOKEN,
@@ -41,6 +42,10 @@ export const getPlayer = () => async (dispatch) => {
 export const getUser = (data) => ({
   type: GET_USER,
   data,
+});
+
+export const resetPlayerScore = () => ({
+  type: RESET_PLAYER_SCORE_AND_ASSERTIONS,
 });
 
 export const getQuestionsAction = (token) => async (dispatch) => {

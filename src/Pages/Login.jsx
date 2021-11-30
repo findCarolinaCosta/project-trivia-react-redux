@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getPlayer, getUser, getUserRanking } from '../actions';
-import convertEmailToHash from '../services/gravatarRequest';
+import { getPlayer, getUser } from '../actions';
 
 class Login extends React.Component {
   constructor() {
@@ -20,13 +19,6 @@ class Login extends React.Component {
     event.preventDefault();
     const { history, dispatch } = this.props;
     const { name, email } = this.state;
-    const newObj = {
-      name,
-      score: '',
-      picture: convertEmailToHash(email),
-    };
-
-    dispatch(getUserRanking(newObj));
     dispatch(getPlayer());
     dispatch(getUser({ name, email }));
     const playerObj = {
@@ -38,7 +30,7 @@ class Login extends React.Component {
       },
     };
     localStorage.setItem('state', JSON.stringify(playerObj));
-    // localStorage.setItem('token', token);
+    localStorage.setItem('ranking', []);
     history.push('/game');
   }
 
